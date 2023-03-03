@@ -6,6 +6,7 @@ image_version: "{{ awx_image_base }}"
 awx_image_base: quay.io/ansible/awx
 awx_image_tag: latest
 awx_operator_source_repo: ansible/awx-operator
+awx_operator_source_branch: "{{ awx_operator_image_tag }}"
 awx_operator_image_base: quay.io/{{ awx_operator_source_repo }}
 awx_operator_image_tag: "1.2.0"
 awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
