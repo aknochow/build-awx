@@ -10,17 +10,6 @@
     build_image_repo: ""
     build_image_tag: ""
     build_image: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"
-    # build vars
-    awx_image: "{{ build_image_repo }}"
-    awx_image_tag: "{{ build_image_tag }}"
-    build_dev: false
-    kube_dev: false
-    headless: no
-    dockerfile_dest: src/{{ source_repo }}
-    dockerfile_name: Dockerfile
-    template_dest: _build
-    receptor_image: quay.io/ansible/receptor:devel
-    image_architecture: '{{ { "x86_64": "amd64", "aarch64": "arm64", "armv7": "arm", "arm64": "arm64", "ppc64le": "ppc64le" }[ansible_facts.architecture] }}'
     # deploy to kubernetes
     deploy_namespace: awx
     deploy_domain: ""
@@ -30,6 +19,7 @@
     install_awx: true
     # awx-operator
     awx_operator_source_repo: "{{ source_repo }}"
+    awx_operator_source_repo: "{{ source_branch }}"
     awx_operator_image_base: "{{ build_image_registry }}/{{ build_image_repo }}"
     awx_operator_image_tag: "{{ build_image_tag }}"
     # awx    
