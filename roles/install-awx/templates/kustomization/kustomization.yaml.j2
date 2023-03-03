@@ -6,7 +6,7 @@ resources:
 
 # Set the image tags to match the git version from above
 images:
-  - name: {{ awx_operator_image }}
+  - name: {{ awx_operator_image_base }}
     newTag: {{ awx_operator_image_tag }}
 
 # Specify a custom namespace in which to install AWX
