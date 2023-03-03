@@ -16,7 +16,7 @@
     deploy: false
     prepare: true
     awx_namespace: "{{ deploy_namespace }}"
-    install_awx: true
+    install_awx: false
     # awx-operator
     awx_operator_source_repo: "{{ source_repo }}"
     awx_operator_source_branch: "{{ source_branch }}"
