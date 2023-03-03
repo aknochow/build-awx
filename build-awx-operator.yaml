@@ -40,10 +40,10 @@
     ansible.builtin.import_role:
       name: build-awx-operator
 
-  - name: Set awx name {{ pr_sha[:7] }} and namespace {{ pr_sha[:7] }} for ci
+  - name: Set awx name and namespace to awx-{{ pr_sha[:7] }} for ci
     ansible.builtin.set_fact:
-      awx_name: "{{ pr_sha[:7] }}"
-      awx_namespace: "{{ pr_sha[:7] }}"
+      awx_name: awx-{{ pr_sha[:7] }}
+      awx_namespace: awx-{{ pr_sha[:7] }}
     when: pr_sha != ""
 
   - name: Set awx deployment domain if defined
