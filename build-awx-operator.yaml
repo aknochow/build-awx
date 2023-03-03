@@ -47,20 +47,20 @@
       dns_domain: "{{ deploy_domain }}"
     when: deploy_domain != ""
 
-    - name: Build AWX Operator Block
-      block:
+  - name: Build AWX Operator Block
+    block:
 #      
-        - name: Import build role
-          ansible.builtin.import_role:
-            name: build-awx-operator
+      - name: Import build role
+        ansible.builtin.import_role:
+          name: build-awx-operator
 
-        - name: Import create-awx role     
-          ansible.builtin.import_role:
-            name: create-awx
-          when: create_awx | bool
-          
+      - name: Import create-awx role     
+        ansible.builtin.import_role:
+          name: create-awx
+        when: create_awx | bool
+        
 #    rescue:
-    # rescue tasks go here... (cleanup?)
-    # error notifications and extra log output
+  # rescue tasks go here... (cleanup?)
+  # error notifications and extra log output
 #    always:          
-    # notifications and logs and other stuff we want to always happen go here
+  # notifications and logs and other stuff we want to always happen go here
