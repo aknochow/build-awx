@@ -30,28 +30,36 @@
     dns_domain: "{{ ansible_facts['nodename'] }}" 
 #
   tasks:
-#
-  - name: Import prepare role
-    ansible.builtin.import_role:
-      name: prepare
-    when: prepare | bool
+    - name: Build AWX Operator Block
+      block:
+#      
+        - name: Import prepare role
+          ansible.builtin.import_role:
+            name: prepare
+          when: prepare | bool
 
-  - name: Import build role
-    ansible.builtin.import_role:
-      name: build-awx-operator
+        - name: Import build role
+          ansible.builtin.import_role:
+            name: build-awx-operator
 
-  - name: Set awx name and namespace to awx-{{ pr_sha[:7] }} for ci
-    ansible.builtin.set_fact:
-      awx_name: awx-{{ pr_sha[:7] }}
-      awx_namespace: awx-{{ pr_sha[:7] }}
-    when: pr_sha != ""
+        - name: Set awx name and namespace to awx-{{ pr_sha[:7] }} for ci
+          ansible.builtin.set_fact:
+            awx_name: awx-{{ pr_sha[:7] }}
+            awx_namespace: awx-{{ pr_sha[:7] }}
+          when: pr_sha != ""
 
-  - name: Set awx deployment domain if defined
-    ansible.builtin.set_fact:
-      dns_domain: "{{ deploy_domain }}"
-    when: deploy_domain != ""
+        - name: Set awx deployment domain if defined
+          ansible.builtin.set_fact:
+            dns_domain: "{{ deploy_domain }}"
+          when: deploy_domain != ""
 
-  - name: Import install-awx role     
-    ansible.builtin.import_role:
-      name: install-awx
-    when: install_awx | bool
+        - name: Import install-awx role     
+          ansible.builtin.import_role:
+            name: install-awx
+          when: install_awx | bool
+          
+#    rescue:
+    # rescue tasks go here... (cleanup?)
+    # error notifications and extra log output
+#    always:          
+    # notifications and logs and other stuff we want to always happen go here
