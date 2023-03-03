@@ -25,7 +25,8 @@
     deploy_namespace: awx
     deploy: false
     prepare: true
-    awx_namespace: awx
+    awx_namespace: "{{ deploy_namespace }}"
+    install_awx: false
     # awx-operator
     awx_operator_source_repo: "{{ source_repo }}"
     awx_operator_image_base: "{{ build_image_registry }}/{{ build_image_repo }}"
@@ -51,4 +52,4 @@
   - name: Import install-awx role     
     ansible.builtin.import_role:
       name: install-awx
-    when: deploy | bool
+    when: install_awx | bool
