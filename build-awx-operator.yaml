@@ -14,7 +14,7 @@
     deploy_namespace: awx
     deploy_domain: ""
     deploy: false
-    prepare: false
+    prepare: true
     awx_namespace: "{{ deploy_namespace }}"
     install_awx: true
     # awx-operator
