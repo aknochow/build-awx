@@ -43,7 +43,7 @@
   - name: Set awx facts for ci
     ansible.builtin.set_fact:
       awx_name: "{{ pr_sha }}"
-      awx_namespace: "{{ pr_sha }}"
+      awx_namespace: "{{ pr_id[:8] }}"
     when: pr_sha != ""
 
   - name: Set awx deployment domain if defined
