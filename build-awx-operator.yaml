@@ -24,7 +24,7 @@
     awx_operator_image_tag: "{{ build_image_tag }}"
     # awx    
     awx_name: awx
-    awx_image_base: quay.io/ansible/awx
+    awx_image: quay.io/ansible/awx
     awx_image_tag: latest
     awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
     dns_domain: "{{ ansible_facts['nodename'] }}" 
