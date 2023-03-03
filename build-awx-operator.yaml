@@ -23,10 +23,11 @@
     image_architecture: '{{ { "x86_64": "amd64", "aarch64": "arm64", "armv7": "arm", "arm64": "arm64", "ppc64le": "ppc64le" }[ansible_facts.architecture] }}'
     # deploy to kubernetes
     deploy_namespace: awx
+    deploy_domain: ""
     deploy: false
     prepare: false
     awx_namespace: "{{ deploy_namespace }}"
-    install_awx: false
+    install_awx: true
     # awx-operator
     awx_operator_source_repo: "{{ source_repo }}"
     awx_operator_image_base: "{{ build_image_registry }}/{{ build_image_repo }}"
@@ -48,6 +49,16 @@
   - name: Import build role
     ansible.builtin.import_role:
       name: build-awx-operator
+
+  - name: Set awx deployment name for ci
+    ansible.builtin.set_fact:
+      awx_name: "{{ pr_sha }}"
+    when: pr_sha != ""
+
+  - name: Set awx deployment domain if defined
+    ansible.builtin.set_fact:
+      dns_domain: "{{ deploy_domain }}"
+    when: deploy_domain != ""
 
   - name: Import install-awx role     
     ansible.builtin.import_role:
