@@ -1,0 +1,54 @@
+---
+- name: Build and Push AWX
+  hosts: localhost
+  vars:
+    source_repo: ansible/awx
+    source_branch: devel
+    # build image
+    build_image_push: true
+    build_image_registry: "ttl.sh"
+    build_image_repo: ""
+    build_image_tag: ""
+    build_image: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"
+    # build vars
+    awx_image: "{{ build_image_repo }}"
+    awx_image_tag: "{{ build_image_tag }}"
+    build_dev: false
+    kube_dev: false
+    headless: no
+    dockerfile_dest: src/{{ source_repo }}
+    dockerfile_name: Dockerfile
+    template_dest: _build
+    receptor_image: quay.io/ansible/receptor:devel
+    image_architecture: '{{ { "x86_64": "amd64", "aarch64": "arm64", "armv7": "arm", "arm64": "arm64", "ppc64le": "ppc64le" }[ansible_facts.architecture] }}'
+    # deploy to kubernetes
+    deploy_namespace: awx
+    deploy: false
+    prepare: true
+    awx_namespace: awx
+    # awx-operator
+    awx_operator_source_repo: "{{ source_repo }}"
+    awx_operator_image_base: "{{ build_image_registry }}/{{ build_image_repo }}"
+    awx_operator_image_tag: "{{ build_image_tag }}"
+    # awx    
+    awx_name: awx
+    awx_image_base: quay.io/ansible/awx
+    awx_image_tag: latest
+    awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
+    dns_domain: "{{ ansible_facts['nodename'] }}" 
+#
+  tasks:
+#
+  - name: Import prepare role
+    ansible.builtin.import_role:
+      name: prepare
+    when: prepare | bool
+
+  - name: Import build role
+    ansible.builtin.import_role:
+      name: build-awx-operator
+
+  - name: Import install-awx role     
+    ansible.builtin.import_role:
+      name: install-awx
+    when: deploy | bool

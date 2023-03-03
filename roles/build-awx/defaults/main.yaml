@@ -1,0 +1,23 @@
+---
+# clone source
+source_repo: ansible/awx
+source_branch: devel
+# build image
+build_image_push: true
+build_image_registry: "ttl.sh"
+build_image_repo: ""
+build_image_tag: ""
+build_image: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"
+# build vars
+awx_image: "{{ build_image_repo }}"
+awx_image_tag: "{{ build_image_tag }}"
+build_dev: false
+kube_dev: false
+headless: no
+dockerfile_dest: src/{{ source_repo }}
+dockerfile_name: Dockerfile
+template_dest: _build
+receptor_image: quay.io/ansible/receptor:devel
+image_architecture: '{{ { "x86_64": "amd64", "aarch64": "arm64", "armv7": "arm", "arm64": "arm64", "ppc64le": "ppc64le" }[ansible_facts.architecture] }}'
+# ci
+pr_sha: ""
