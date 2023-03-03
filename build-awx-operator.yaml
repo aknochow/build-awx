@@ -14,20 +14,21 @@
     deploy_namespace: awx
     deploy_domain: ""
     deploy: false
-    prepare: true
+    prepare: false
     awx_namespace: "{{ deploy_namespace }}"
-    install_awx: false
+    
     # awx-operator
     awx_operator_source_repo: "{{ source_repo }}"
     awx_operator_source_branch: "{{ source_branch }}"
     awx_operator_image_base: "{{ build_image_registry }}/{{ build_image_repo }}"
     awx_operator_image_tag: "{{ build_image_tag }}"
-    # awx    
+    # awx
     awx_name: awx
     awx_image: quay.io/ansible/awx
     awx_image_tag: latest
     awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
-    dns_domain: "{{ ansible_facts['nodename'] }}" 
+    dns_domain: "{{ ansible_facts['nodename'] }}"
+    create_awx: false 
 #
   tasks:
     - name: Build AWX Operator Block
@@ -37,10 +38,6 @@
           ansible.builtin.import_role:
             name: prepare
           when: prepare | bool
-
-        - name: Import build role
-          ansible.builtin.import_role:
-            name: build-awx-operator
 
         - name: Set awx name and namespace to awx-{{ pr_sha[:7] }} for ci
           ansible.builtin.set_fact:
@@ -53,10 +50,14 @@
             dns_domain: "{{ deploy_domain }}"
           when: deploy_domain != ""
 
-        - name: Import install-awx role     
+        - name: Import build role
           ansible.builtin.import_role:
-            name: install-awx
-          when: install_awx | bool
+            name: build-awx-operator
+
+        - name: Import create-awx role     
+          ansible.builtin.import_role:
+            name: create-awx
+          when: create_awx | bool
           
 #    rescue:
     # rescue tasks go here... (cleanup?)

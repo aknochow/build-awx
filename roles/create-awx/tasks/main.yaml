@@ -1,0 +1,9 @@
+---
+- name: Create AWX - {{ awx_hostname }}
+  kubernetes.core.k8s:
+    state: present
+    src: templates/{{ lookup('ansible.builtin.template', 'awx.yaml.j2') }}
+    wait: yes
+    wait_condition:
+      type: Running
+      status: "True"
