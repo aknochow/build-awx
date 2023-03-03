@@ -24,7 +24,7 @@
     # deploy to kubernetes
     deploy_namespace: awx
     deploy: false
-    prepare: true
+    prepare: false
     awx_namespace: "{{ deploy_namespace }}"
     install_awx: false
     # awx-operator
