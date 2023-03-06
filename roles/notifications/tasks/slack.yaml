@@ -1,0 +1,46 @@
+---
+- name: General build notification
+  ignore_errors: yes
+  slack:
+    token: "{{ slack_token }}"
+    color: good
+    link_names: 0
+    msg: |
+      >*{{ awx_job_template_name }}*
+      *build_image: `{{ build_image }}`*
+      *src: `{{ source_repo }}:{{ source_branch }}`*
+      launch_type: {{ awx_job_launch_type }}
+      <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
+  when: not create_awx | bool and slack_notify | bool
+
+- name: Build AWX Operator and Create AWX
+  ignore_errors: yes
+  slack:
+    token: "{{ slack_token }}"
+    color: good
+    link_names: 0
+    msg: |
+      >*{{ awx_job_template_name }}*
+      *build_image: `{{ build_image }}`*
+      *src: `{{ source_repo }}:{{ source_branch }}`*
+      >*AWX: https://{{ awx_hostname }} deployed on kubernetes to the {{ awx_namespace }} namespace.*
+      >*admin password: `{{ query('kubernetes.core.k8s', kind='secret', namespace='{{ awx_namespace }}', resource_name='{{ awx_name }}-admin-password') | b64decode }}`*
+      AWX image: `{{ awx_image }}:{{ awx_image_tag }}`
+      launch_type: {{ awx_job_launch_type }}
+      <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
+  when: create_awx | bool and slack_notify | bool
+
+- name: Build and Deploy AWX
+  ignore_errors: yes
+  slack:
+    token: "{{ slack_token }}"
+    color: good
+    msg: |
+      >*{{ awx_job_template_name }}*
+      *build_image: `{{ build_image }}`*
+      *source: `{{ source_repo }}:{{ source_branch }}`*
+      >*AWX: https://{{ awx_hostname }}*
+      >*admin password: `{{ awx_admin_password }}`*
+      <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
+  when: deploy | bool and slack_notify | bool
+
