@@ -66,9 +66,7 @@
             image: `{{ build_image }}`
             *AWX: https://{{ awx_hostname }}*
 
-            *More details:*
-            {{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}
-            
+            <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]
         when: create_awx | bool and slack_notify | bool
 
       - name: Send slack notification for just an image build
@@ -81,9 +79,7 @@
             built from: *`{{ source_repo }}:{{ source_branch }}`*
             image: `{{ build_image }}`
 
-            *More details:*
-            {{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}
-            
+            <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]
         when: not create_awx | bool and slack_notify | bool
 
 
