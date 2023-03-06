@@ -43,7 +43,7 @@
   community.general.make:
     chdir: src/{{ source_repo }}
     params:
-      IMG: "{{ build_image }}"      
+      IMG: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"      
     target: docker-build
 
 - name: Make docker-push {{ build_image }}
