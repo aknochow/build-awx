@@ -114,7 +114,7 @@
             *AWX: https://{{ awx_hostname }}*
 
             *More details:*
-            {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
+            {{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}
             *=============*
         when: deploy | bool and slack_notify | bool
 
@@ -129,6 +129,6 @@
             image: `{{ build_image }}`
 
             *More details:*
-            {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
+            {{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}
             *=============*
         when: not deploy | bool and slack_notify | bool
