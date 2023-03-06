@@ -61,7 +61,7 @@
           token: "{{ slack_token }}"
           color: good
           msg: |
-            *{{ awx_job_template_name }}*
+            >*{{ awx_job_template_name }}*
             built from: *`{{ source_repo }}:{{ source_branch }}`*
             image: `{{ build_image }}`
             *AWX: https://{{ awx_hostname }}*
@@ -77,7 +77,7 @@
           token: "{{ slack_token }}"
           color: good
           msg: |
-            *{{ awx_job_template_name }}*
+            >*{{ awx_job_template_name }}*
             built from: *`{{ source_repo }}:{{ source_branch }}`*
             image: `{{ build_image }}`
 
