@@ -4,10 +4,10 @@
   slack:
     token: "{{ slack_token }}"
     color: good
-    link_names: 0
+    parse: none
     msg: |
       >*{{ awx_job_template_name }}*
-      *build_image:* *`{{ build_image }}`*
+      *image:`{{ build_image }}`*
       *src: `{{ source_repo }}:{{ source_branch }}`*
       *launch_type:* `{{ awx_job_launch_type }}`
       <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
