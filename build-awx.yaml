@@ -109,12 +109,12 @@
           color: good
           msg: |
             >*{{ awx_job_template_name }}*
-            `{{ build_image }}`
+            >`{{ build_image }}`
             built from: *`{{ source_repo }}:{{ source_branch }}`*
             
             *AWX: https://{{ awx_hostname }}*
 
-            <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]
+            <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
         when: deploy | bool and slack_notify | bool
 
       - name: Send slack notification for just an image build
@@ -124,8 +124,8 @@
           color: good
           msg: |
             >*{{ awx_job_template_name }}*
-            `{{ build_image }}`
+            >`{{ build_image }}`
             built from: *`{{ source_repo }}:{{ source_branch }}`*
 
-            <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]
+            <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
         when: not deploy | bool and slack_notify | bool
