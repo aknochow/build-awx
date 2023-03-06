@@ -69,7 +69,7 @@
             *More details:*
             {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
             *=============*
-        when: deploy | bool or install_awx | bool
+        when: create_awx | bool
 
       - name: Send slack notification for just an image build
         ignore_errors: yes
@@ -84,7 +84,7 @@
             *More details:*
             {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
             *=============*
-        when: not deploy | bool and not install_awx | bool
+        when: not create_awx | bool
 
 
 # all the vars:
