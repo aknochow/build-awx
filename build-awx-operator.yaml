@@ -65,6 +65,8 @@
             >built from: *`{{ source_repo }}/{{ source_branch }}`* ({{ awx_job_launch_type }})
             >image: `{{ build_image }}`
 
+            >*AWX: https://{{ awx_hostname }}*
+
             *More details:*
             {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
             *=============*  
