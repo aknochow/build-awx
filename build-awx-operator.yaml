@@ -30,7 +30,7 @@
     create_awx: false 
     # notifications
     awx_url: ""
-    slack_webook_url: ""
+    slack_token: ""
 #
   tasks:
   - name: Import prepare role
@@ -58,7 +58,7 @@
       - name: Send slack notification
         ignore_errors: yes
         slack:
-          token: "{{ slack_webook_url }}"
+          token: "{{ slack_token }}"
           color: good
           msg: |
             >*{{ awx_job_template_name }}*
