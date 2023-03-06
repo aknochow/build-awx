@@ -26,6 +26,7 @@
     image_architecture: '{{ { "x86_64": "amd64", "aarch64": "arm64", "armv7": "arm", "arm64": "arm64", "ppc64le": "ppc64le" }[ansible_facts.architecture] }}'  
     # notifications
     awx_url: ""
+    awx_admin_password: ""
     slack_token: ""
     slack_notify: ""
 #
@@ -109,10 +110,10 @@
           color: good
           msg: |
             >*{{ awx_job_template_name }}*
-            >`{{ build_image }}`
-            built from: *`{{ source_repo }}:{{ source_branch }}`*
-            
-            *AWX: https://{{ awx_hostname }}*
+            *build_image: `{{ build_image }}`*
+            *source: `{{ source_repo }}:{{ source_branch }}`*
+            >*AWX: https://{{ awx_hostname }}*
+            >*admin password: `{{ awx_admin_password }}`*
 
             <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
         when: deploy | bool and slack_notify | bool
@@ -124,8 +125,8 @@
           color: good
           msg: |
             >*{{ awx_job_template_name }}*
-            >`{{ build_image }}`
-            built from: *`{{ source_repo }}:{{ source_branch }}`*
+            *build_image: `{{ build_image }}`*
+            *source: `{{ source_repo }}:{{ source_branch }}`*
 
             <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
         when: not deploy | bool and slack_notify | bool

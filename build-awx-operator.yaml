@@ -28,9 +28,9 @@
     awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
     dns_domain: "{{ ansible_facts['nodename'] }}"
     create_awx: false 
-    awx_admin_password: ""
     # notifications
     awx_url: ""
+    awx_admin_password: ""
     slack_token: ""
     slack_notify: ""
 #
@@ -63,11 +63,10 @@
           color: good
           msg: |
             >*{{ awx_job_template_name }}*
-            >`{{ build_image }}`
+            *build_image: `{{ build_image }}`*
+            *source: `{{ source_repo }}:{{ source_branch }}`*
             >*AWX: https://{{ awx_hostname }}*
             >*admin password: `{{ awx_admin_password }}`*
-            built from: *`{{ source_repo }}:{{ source_branch }}`*
-
             <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
         when: create_awx | bool and slack_notify | bool
 
@@ -78,9 +77,8 @@
           color: good
           msg: |
             >*{{ awx_job_template_name }}*
-            >`{{ build_image }}`
-            built from: *`{{ source_repo }}:{{ source_branch }}`*
-
+            *build_image: `{{ build_image }}`*
+            *source: `{{ source_repo }}:{{ source_branch }}`*
             <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
         when: not create_awx | bool and slack_notify | bool
 
