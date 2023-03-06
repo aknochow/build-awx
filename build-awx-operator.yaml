@@ -55,21 +55,36 @@
   # error notifications and extra log output
     always:          
   # notifications and logs and other stuff we want to always happen go here
-      - name: Send slack notification
+      - name: Send slack notification with AWX deployment info
         ignore_errors: yes
         slack:
           token: "{{ slack_token }}"
           color: good
           msg: |
-            >*{{ awx_job_template_name }}*
-            >built from: *`{{ source_repo }}/{{ source_branch }}`* ({{ awx_job_launch_type }})
-            >image: `{{ build_image }}`
-
-            >*AWX: https://{{ awx_hostname }}*
+            *{{ awx_job_template_name }}*
+            built from: *`{{ source_repo }}:{{ source_branch }}`*
+            image: `{{ build_image }}`
+            *AWX: https://{{ awx_hostname }}*
 
             *More details:*
             {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
-            *=============*  
+            *=============*
+        when: deploy | bool or install_awx | bool
+
+      - name: Send slack notification for just an image build
+        ignore_errors: yes
+        slack:
+          token: "{{ slack_token }}"
+          color: good
+          msg: |
+            *{{ awx_job_template_name }}*
+            built from: *`{{ source_repo }}:{{ source_branch }}`*
+            image: `{{ build_image }}`
+
+            *More details:*
+            {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
+            *=============*
+        when: deploy | not bool and install_awx | not bool
 
 
 # all the vars:
