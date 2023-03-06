@@ -51,11 +51,10 @@
           name: create-awx
         when: create_awx | bool
         
-#    rescue:
-  # rescue tasks go here... (cleanup?)
-  # error notifications and extra log output
+    # rescue:
+    # rescue tasks go here... (cleanup?)
+    # error notifications and extra log output
     always:          
-  # notifications and logs and other stuff we want to always happen go here
       - name: Send slack notification with AWX deployment info
         ignore_errors: yes
         slack:
