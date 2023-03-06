@@ -61,6 +61,7 @@
         slack:
           token: "{{ slack_token }}"
           color: good
+          link_names: no
           msg: |
             >*{{ awx_job_template_name }}*
             *build_image: `{{ build_image }}`*
@@ -75,6 +76,7 @@
         slack:
           token: "{{ slack_token }}"
           color: good
+          link_names: no
           msg: |
             >*{{ awx_job_template_name }}*
             *build_image: `{{ build_image }}`*
