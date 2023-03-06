@@ -51,7 +51,7 @@
     chdir: src/{{ source_repo }}
     target: docker-push
     params:
-      IMG: "{{ build_image }}"
+      IMG: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}" 
   when: build_image_push | bool
 
 - name: Make deploy
@@ -60,5 +60,5 @@
     target: deploy
     params:
       NAMESPACE: "{{ deploy_namespace }}" 
-      IMG: "{{ build_image }}"
+      IMG: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"
   when: deploy | bool
