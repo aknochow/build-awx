@@ -6,7 +6,7 @@
     source_branch: devel
     # build image
     build_image_push: true
-    build_image_registry: "ttl.sh"
+    build_image_registry: ""
     build_image_repo: ""
     build_image_tag: ""
     build_image: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"
@@ -37,18 +37,6 @@
     ansible.builtin.import_role:
       name: prepare
     when: prepare | bool
-
-  - name: Set awx name and namespace to awx-{{ pr_sha[:7] }} for ci
-    ansible.builtin.set_fact:
-      awx_name: awx-{{ pr_sha[:7] }}
-      awx_namespace: awx-{{ pr_sha[:7] }}
-      deploy_namespace: awx-{{ pr_sha[:7] }}
-    when: pr_sha != ""
-
-  - name: Set awx deployment domain if defined
-    ansible.builtin.set_fact:
-      dns_domain: "{{ deploy_domain }}"
-    when: deploy_domain != ""
 #
   - name: Build AWX Operator Block
     block:

@@ -7,17 +7,30 @@
     version: "{{ source_branch }}"
     force: true
 
-- name: Set build_image repo and tag when using ttl.sh
+- name: Set awx name and namespace to awx-{{ pr_sha7 }} for ci
   ansible.builtin.set_fact:
+    awx_name: awx-{{ pr_sha7 }}
+    awx_namespace: awx-{{ pr_sha7 }}
+    deploy_namespace: awx-{{ pr_sha7 }}
+  when: pr_sha != ""
+
+- name: Set awx deployment domain if defined
+  ansible.builtin.set_fact:
+    dns_domain: "{{ deploy_domain }}"
+  when: deploy_domain != ""    
+
+- name: Set build_image to use ttl.sh temporary ephemeral storage if registry is not set
+  ansible.builtin.set_fact:
+    build_image_registry: ttl.sh
     build_image_repo: "{{ ansible_date_time.iso8601_micro | to_uuid }}"
     build_image_tag: 1h
-  when: build_image_registry == "ttl.sh" and pr_sha == ""
+  when: build_image_registry == "" and pr_sha == ""
 
-- name: Set build_image repo and tag when using ttl.sh for ci
+- name: Set build_image repo and tag when using ttl.sh temporary ephemeral storage for ci
   ansible.builtin.set_fact:
     build_image_repo: "{{ pr_sha }}"
     build_image_tag: 2h
-  when: build_image_registry == "ttl.sh" and pr_sha != ""   
+  when: build_image_registry == "ttl.sh" and pr_sha != ""
 
 - name: Login to quay.io
   containers.podman.podman_login:

@@ -10,6 +10,8 @@ build_image_tag: ""
 build_image: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"
 # deploy to kubernetes
 deploy: false
+deploy_domain: ""
 deploy_namespace: awx
 # ci
 pr_sha: ""
+pr_sha7: ""
