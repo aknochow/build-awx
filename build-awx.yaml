@@ -115,7 +115,7 @@
 
             *More details:*
             {{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}
-            *_____________________________________________________*
+            
         when: deploy | bool and slack_notify | bool
 
       - name: Send slack notification for just an image build
@@ -130,5 +130,5 @@
 
             *More details:*
             {{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}
-            *_____________________________________________________*
+            
         when: not deploy | bool and slack_notify | bool
