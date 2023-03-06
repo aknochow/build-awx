@@ -19,6 +19,13 @@
     build_image_tag: 2h
   when: build_image_registry == "ttl.sh" and pr_sha != ""   
 
+- name: Login to quay.io
+  containers.podman.podman_login:
+    username: "{{ quay_robot_username }}"
+    password: "{{ quay_robot_password }}"
+    registry: quay.io
+  when: build_image_registry == "quay.io"  
+
 - name: Make docker-build {{ build_image }}
   community.general.make:
     chdir: src/{{ source_repo }}
