@@ -29,6 +29,7 @@
     dns_domain: "{{ ansible_facts['nodename'] }}"
     create_awx: false 
     # notifications
+    notifications: ""
     awx_url: ""
     awx_admin_password: ""
     slack_token: ""
