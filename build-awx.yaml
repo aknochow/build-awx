@@ -1,0 +1,134 @@
+---
+- name: Build and Push AWX
+  hosts: localhost
+  vars:
+    source_repo: ansible/awx
+    source_branch: devel
+    # build image
+    build_image_push: true
+    build_image_registry: "ttl.sh"
+    build_image_repo: ""
+    build_image_tag: ""
+    build_image: "{{ build_image_registry }}/{{ build_image_repo }}:{{ build_image_tag }}"
+    # deploy to kubernetes
+    deploy: false
+    deploy_namespace: awx
+    # build vars
+    awx_image: "{{ build_image_repo }}"
+    awx_image_tag: "{{ build_image_tag }}"
+    build_dev: false
+    kube_dev: false
+    headless: no
+    dockerfile_dest: src/{{ source_repo }}
+    dockerfile_name: Dockerfile
+    template_dest: _build
+    receptor_image: quay.io/ansible/receptor:devel
+    image_architecture: '{{ { "x86_64": "amd64", "aarch64": "arm64", "armv7": "arm", "arm64": "arm64", "ppc64le": "ppc64le" }[ansible_facts.architecture] }}'  
+    # notifications
+    awx_url: ""
+    slack_token: ""
+    slack_notify: ""
+#
+  tasks:
+#
+  - name: Build AWX Operator Block
+    block:
+#     
+      - name: Clone {{ source_repo }}:{{ source_branch }} from github.com
+        ansible.builtin.git:
+          repo: https://github.com/{{ source_repo }}.git
+          dest: src/{{ source_repo }}
+          single_branch: yes
+          version: "{{ source_branch }}"
+          force: true
+
+      - name: Set build_image repo and tag when using ttl.sh
+        ansible.builtin.set_fact:
+          build_image_repo: "{{ ansible_date_time.iso8601_micro | to_uuid }}"
+          build_image_tag: 1h
+        when: build_image_registry == "ttl.sh"
+
+      - name: Get version from SCM if not explicitly provided
+        community.general.make:
+          chdir: src/{{ source_repo }}
+          target: print-VERSION
+        register: scm_version
+        failed_when: not scm_version.stdout
+        when: awx_version is not defined    
+
+      - name: Set awx_version
+        ansible.builtin.set_fact:
+          awx_version: "{{ scm_version.stdout | split('+') | first  }}"
+        when: awx_version is not defined
+
+      - name: Create {{ template_dest }} directory
+        ansible.builtin.file:
+          path: "{{ dockerfile_dest }}/{{ template_dest }}"
+          state: directory
+
+      - name: Render supervisor configs
+        ansible.builtin.template:
+          src: src/{{ source_repo }}/tools/ansible/roles/dockerfile/templates/{{ item }}.conf.j2
+          dest: "{{ dockerfile_dest }}/{{ template_dest }}/{{ item }}.conf"
+        with_items:
+          - supervisor
+          - supervisor_task
+
+      - name: Render Dockerfile
+        ansible.builtin.template:
+          src: src/{{ source_repo }}/tools/ansible/roles/dockerfile/templates/Dockerfile.j2
+          dest: "{{ dockerfile_dest }}/{{ dockerfile_name }}"
+
+      - name: Verify awx-logos directory exists for official install
+        stat:
+          path: src/awx-logos
+        register: logosdir
+        failed_when: logosdir.stat.isdir is not defined or not logosdir.stat.isdir
+        when: awx_official|default(false)|bool
+
+      - name: Copy logos for inclusion in sdist
+        copy:
+          src: src/awx-logos/awx/ui/client/assets/
+          dest: src/{{ source_repo }}/awx/ui/public/static/media/
+        when: awx_official|default(false)|bool
+
+      - name: Build AWX image {{ build_image }} with podman
+        containers.podman.podman_image:
+          name: "{{ build_image }}"
+          path: "{{ dockerfile_dest }}"
+          push: "{{ build_image_push }}"
+          build:
+            extra_args: "--build-arg VERSION={{ awx_version }} --build-arg SETUPTOOLS_SCM_PRETEND_VERSION={{ awx_version }} --build-arg HEADLESS={{ headless }}"
+
+    always:          
+  # notifications and logs and other stuff we want to always happen go here
+      - name: Send slack notification with AWX deployment info
+        ignore_errors: yes
+        slack:
+          token: "{{ slack_token }}"
+          color: good
+          msg: |
+            *{{ awx_job_template_name }}*
+            built from: *`{{ source_repo }}:{{ source_branch }}`*
+            image: `{{ build_image }}`
+            *AWX: https://{{ awx_hostname }}*
+
+            *More details:*
+            {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
+            *=============*
+        when: deploy | bool and slack_notify | bool
+
+      - name: Send slack notification for just an image build
+        ignore_errors: yes
+        slack:
+          token: "{{ slack_token }}"
+          color: good
+          msg: |
+            *{{ awx_job_template_name }}*
+            built from: *`{{ source_repo }}:{{ source_branch }}`*
+            image: `{{ build_image }}`
+
+            *More details:*
+            {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
+            *=============*
+        when: not deploy | bool and slack_notify | bool
