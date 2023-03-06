@@ -15,6 +15,7 @@
 
 - name: Build AWX Operator and Create AWX
   ignore_errors: yes
+  no_log: true
   slack:
     token: "{{ slack_token }}"
     color: good
@@ -25,7 +26,7 @@
       *build_source: `{{ source_repo }}:{{ source_branch }}`*
       *launch_type:* `{{ awx_job_launch_type }}`
       >*AWX: https://{{ awx_hostname }} deployed on kubernetes to the {{ awx_namespace }} namespace.*
-      *admin password: `{{ query('kubernetes.core.k8s', kind='secret', namespace='{{ awx_namespace }}', resource_name='{{ awx_name }}-admin-password') | b64decode }}`*
+      *admin password: `{{ query('kubernetes.core.k8s_info', kind='secret', namespace='{{ awx_namespace }}', resource_name='{{ awx_name }}-admin-password') | b64decode }}`*
       AWX image: `{{ awx_image }}:{{ awx_image_tag }}`
       <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
   when: create_awx | bool and slack_notify | bool

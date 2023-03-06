@@ -1,4 +1,16 @@
 ---
+#- name: Respond to Github PR
+#  include: github-pr.yaml
+#  when: pr_sha != ""
+
+#- name: Respond to Github Check
+#  include: github-check.yaml
+#  when: pr_sha != ""
+
+#- name: Dump logs to secret gist?
+#  include: github-gist.yaml
+#  when: pr_sha != "" and dump_log | bool
+
 - name: Include slack notifications
   include: slack.yaml
   when: slack_notify | bool

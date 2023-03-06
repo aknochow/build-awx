@@ -7,8 +7,3 @@
     wait_condition:
       type: Running
       status: "True"
-
-- name: Get admin password for AWX
-  ansible.builtin.set_fact:
-    awx_admin_password: "{{ query('kubernetes.core.k8s', kind='secret', namespace='{{ awx_namespace }}', resource_name='{{ awx_name }}-admin-password') | b64decode}}"
-  no_log: true
