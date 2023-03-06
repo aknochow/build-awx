@@ -84,7 +84,7 @@
             *More details:*
             {{ awx_url }}/#/jobs/playbook/{{ awx_job_id }}
             *=============*
-        when: deploy | not bool and install_awx | not bool
+        when: not deploy | bool and not install_awx | bool
 
 
 # all the vars:
