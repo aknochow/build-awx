@@ -4,3 +4,4 @@ awx_namespace: awx
 awx_hostname: ""
 awx_image: quay.io/ansible/awx
 awx_image_tag: latest
+awx_admin_password: ""

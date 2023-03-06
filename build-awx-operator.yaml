@@ -28,6 +28,7 @@
     awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
     dns_domain: "{{ ansible_facts['nodename'] }}"
     create_awx: false 
+    awx_admin_password: ""
     # notifications
     awx_url: ""
     slack_token: ""
@@ -64,6 +65,7 @@
             >*{{ awx_job_template_name }}*
             >`{{ build_image }}`
             >*AWX: https://{{ awx_hostname }}*
+            >*admin password: `{{ awx_admin_password }}`*
             built from: *`{{ source_repo }}:{{ source_branch }}`*
 
             <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
