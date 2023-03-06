@@ -21,7 +21,7 @@
     link_names: 0
     msg: |
       >*{{ awx_job_template_name }}*
-      *build_image: `{{ build_image }}`*
+      *build_image:* `{{ build_image }}`
       *src: `{{ source_repo }}:{{ source_branch }}`*
       >*AWX: https://{{ awx_hostname }} deployed on kubernetes to the {{ awx_namespace }} namespace.*
       >*admin password: `{{ query('kubernetes.core.k8s', kind='secret', namespace='{{ awx_namespace }}', resource_name='{{ awx_name }}-admin-password') | b64decode }}`*
