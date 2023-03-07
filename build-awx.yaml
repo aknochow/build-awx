@@ -25,10 +25,12 @@
     receptor_image: quay.io/ansible/receptor:devel
     image_architecture: '{{ { "x86_64": "amd64", "aarch64": "arm64", "armv7": "arm", "arm64": "arm64", "ppc64le": "ppc64le" }[ansible_facts.architecture] }}'  
     # notifications
-    awx_url: ""
-    awx_admin_password: ""
-    slack_token: ""
+    notifications: true
+    github_notify: ""
+    github_token: ""
     slack_notify: ""
+    slack_token: ""
+    awx_url: ""
 #
   tasks:
 #

@@ -1,0 +1,15 @@
+---
+- name: Set message content
+  ansible.builtin.set_fact
+    github_comment: |
+      "{{ build_image }} successfully built and deployed."
+
+- name: Comment test report to PR
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/{{ source_repo }}/issues/{{ pr_number }}/comments"
+    method: POST
+    body: '{"body": {{ gh_comment }} }'
+    status_code: 201
+    body_format: json
+    headers:
+      Authorization: Bearer {{ github_token }}

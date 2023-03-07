@@ -22,18 +22,18 @@
     awx_operator_image_base: "{{ build_image_registry }}/{{ build_image_repo }}"
     awx_operator_image_tag: "{{ build_image_tag }}"
     # awx
+    create_awx: false
     awx_name: awx
     awx_image: quay.io/ansible/awx
     awx_image_tag: latest
+    awx_url: ""
     awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
     dns_domain: "{{ ansible_facts['nodename'] }}"
-    create_awx: false 
     # notifications
     notifications: ""
-    awx_url: ""
-    awx_admin_password: ""
+    github_notify: ""
     slack_token: ""
-    slack_notify: ""
+    slack_notify: ""    
 #
   tasks:
   - name: Import prepare role
