@@ -1,3 +1,3 @@
 ---
-create_awx: False
-deploy_awx: False
+create_awx: false
+deploy_awx: false

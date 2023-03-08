@@ -7,7 +7,7 @@
     parse: none
     msg: |
       >*{{ awx_job_template_name }}*
-      build_image: `{{ build_image }}` ({{ ansible_facts['architecture']}})
+      build_image: `{{ build_image }}` (`{{ ansible_facts['architecture']}}`)
       build_source: `{{ source_repo }}:{{ source_branch }}`
       <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
   when: not create_awx and not deploy_awx
@@ -20,7 +20,7 @@
     parse: none
     msg: |
       >*{{ awx_job_template_name }}*
-      build_image: `{{ build_image }}` ({{ ansible_facts['architecture']}})
+      build_image: `{{ build_image }}` (`{{ ansible_facts['architecture']}}`)
       build_source: `{{ source_repo }}:{{ source_branch }}`
       AWX: <https://{{ awx_hostname }}|https://{{ awx_hostname }}>
       AWX image: `{{ awx_image }}:{{ awx_image_tag }}`
@@ -35,7 +35,7 @@
     parse: none    
     msg: |
       >*{{ awx_job_template_name }}*
-      build_image: `{{ build_image }}` ({{ ansible_facts['architecture']}})
+      build_image: `{{ build_image }}` (`{{ ansible_facts['architecture']}}`)
       build_source: `{{ source_repo }}:{{ source_branch }}`
       AWX: <https://{{ awx_hostname }}|https://{{ awx_hostname }}>
       AWX image: `{{ awx_image }}:{{ awx_image_tag }}`
