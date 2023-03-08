@@ -30,7 +30,7 @@
     awx_hostname: "{{ awx_name }}.{{ dns_domain }}"
     dns_domain: "{{ ansible_facts['nodename'] }}"
     # notifications
-    notifications: ""
+    notifications: true
     github_notify: ""
     slack_token: ""
     slack_notify: ""    
@@ -39,7 +39,7 @@
   - name: Import prepare role
     ansible.builtin.import_role:
       name: prepare
-    when: prepare | bool
+    when: prepare
 #
   - name: Build AWX Operator Block
     block:
@@ -51,11 +51,11 @@
       - name: Import create-awx role     
         ansible.builtin.import_role:
           name: create-awx
-        when: create_awx | bool
+        when: create_awx
 
       - name: Import notifications role     
         ansible.builtin.import_role:
           name: notifications
-        when: notifications | bool        
+        when: notifications       
         
 #    always:
