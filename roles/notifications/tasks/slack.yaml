@@ -10,7 +10,7 @@
       build_image: `{{ build_image }}`
       build_source: `{{ source_repo }}:{{ source_branch }}`
       <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
-  when: not create_awx
+  when: not create_awx and not deploy_awx
 
 - name: Build AWX Operator and Create AWX
   ignore_errors: yes
