@@ -10,7 +10,7 @@
       build_image: `{{ build_image }}`
       build_source: `{{ source_repo }}:{{ source_branch }}`
       <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
-  when: not create_awx and slack_notify
+  when: not create_awx
 
 - name: Build AWX Operator and Create AWX
   ignore_errors: yes
@@ -25,7 +25,7 @@
       AWX: <https://{{ awx_hostname }}|https://{{ awx_hostname }}>
       AWX image: `{{ awx_image }}:{{ awx_image_tag }}`
       <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
-  when: create_awx and slack_notify
+  when: create_awx
 
 - name: Build and Deploy AWX
   ignore_errors: yes
@@ -40,5 +40,4 @@
       AWX: <https://{{ awx_hostname }}|https://{{ awx_hostname }}>
       AWX image: `{{ awx_image }}:{{ awx_image_tag }}`
       <{{ awx_controller_url }}/#/jobs/playbook/{{ awx_job_id }}|[ awx job #{{ awx_job_id }} ]>
-  when: deploy_awx and slack_notify
-
+  when: deploy_awx
